@@ -12,8 +12,8 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 public class FaceAlignment {
-    private static CascadeClassifier eyeCascade = new CascadeClassifier("C:\\Users\\lucas\\Desenvolvimentos\\APS Reconhecimento Facial\\res\\Modelo_Alinhamento\\haarcascade_eye.xml");
-    private static CascadeClassifier mouthCascade = new CascadeClassifier("C:\\Users\\lucas\\Desenvolvimentos\\APS Reconhecimento Facial\\res\\Modelo_Alinhamento\\haarcascade_mcs_mouth.xml");
+    private static CascadeClassifier eyeCascade = new CascadeClassifier("res\\Modelo_Alinhamento\\haarcascade_eye.xml");
+    private static CascadeClassifier mouthCascade = new CascadeClassifier("res\\Modelo_Alinhamento\\haarcascade_mcs_mouth.xml");
 
     public static Mat alignFace(Mat frame, Rect faceRect) {
 

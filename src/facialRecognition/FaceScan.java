@@ -2,7 +2,6 @@ package facialRecognition;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
 import java.util.List;
@@ -12,34 +11,41 @@ public class FaceScan {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);  // Carregar a biblioteca OpenCV
     }
 
+    private VideoCapture camera;
+    private FaceDetection faceDetection;
+
     public FaceScan() {
+        faceDetection = new FaceDetection();
+    }
+
+    public Boolean scan(Mat frame) {
+        try {
+            faceDetection.detectFaces(frame);
+            return true;
+        }
+        catch (Exception e) {return false; }
 
     }
 
-    public String scan() {
-        FaceDetection faceDetection = new FaceDetection();
-        Mat frame = capture(0);
-        saveImagem(frame);
-        List<Float> descriptorVector = faceDetection.detectFace(frame);
-        return "";
+    public List<Float> saveScan(Mat frame) {
+        return faceDetection.getVetorFace(frame);
     }
 
-    public Mat capture(int indexCamera) {
-        // Abrir a câmera
-        VideoCapture camera = new VideoCapture(indexCamera);
+    // Abrir a câmera
+    public void openCamera(int indexCamera){
+        camera = new VideoCapture(indexCamera);
         if (!camera.isOpened()) throw new IllegalStateException("A câmera não pôde ser aberta.");
-        // Capturar um quadro da câmera
-        Mat frame = new Mat();
-        if (!camera.read(frame)) throw new RuntimeException("Não foi possível capturar imagem!.");
-        camera.release();
-        return frame;
     }
 
-    public void saveImagem(Mat frame){
-        String fileName = String.valueOf(frame.nativeObj);
-        String filePath = "C:\\Users\\lucas\\Desenvolvimentos\\APS Reconhecimento Facial\\res\\imagens\\"+fileName+".png";
-        Imgcodecs.imwrite(filePath, frame);
-    }
+    // Fechar camera
+    public void closeCamera() { camera.release(); }
+
+    public Boolean capture(Mat frame) { return camera.read(frame); }
+
+
+
+
+
 
 
 }
