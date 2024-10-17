@@ -4,9 +4,9 @@ import facialRecognition.FaceScan;
 import org.opencv.core.Mat;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import static facialRecognition.ImageConverter.matToBufferedImage;
 
@@ -14,9 +14,12 @@ public class IVideoModal extends JDialog {
     private VideoPanel videoPanel;
     private Thread videoLoop;
     private FaceScan faceScan;
+    private Boolean detect;
+    private JLabel labelMessage;
 
     public IVideoModal(JFrame requesterUi, String title){
         super(requesterUi, title, true);
+        detect = false;
         setSize(640, 480);
         setLocationRelativeTo(requesterUi);
         setComponents();
@@ -34,8 +37,9 @@ public class IVideoModal extends JDialog {
         faceScan.openCamera(0);
 
         Mat frame = new Mat();
+        labelMessage.setText("");
         while (faceScan.capture(frame)) {
-            faceScan.scan(frame);
+            if (detect) faceScan.scan(frame);
             BufferedImage img = matToBufferedImage(frame);
             videoPanel.setImage(img);
 
@@ -46,7 +50,6 @@ public class IVideoModal extends JDialog {
                 e.printStackTrace();
             }
 
-            // Fechar o modal ao clicar no "X"
             if (!this.isVisible())
                 break;
 
@@ -57,15 +60,34 @@ public class IVideoModal extends JDialog {
     private void setComponents(){
         videoPanel = new VideoPanel();
 
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
+        controlPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        labelMessage = new JLabel("Carregando video...");
+        controlPanel.add(labelMessage, BorderLayout.WEST);
+
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT)); // Alinha o botão à direita
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-        // Botão de fechar
-        JButton closeButton = new JButton("Fechar");
-        buttonPanel.add(closeButton);
+        JButton detectionButton = new JButton("Iniciar detecção");
+        JButton captureButton = new JButton("Capturar");
+        buttonPanel.add(detectionButton);
+        buttonPanel.add(captureButton);
 
-        // Adiciona o painel de botões na parte inferior (SOUTH) do BorderLayout
-        add(buttonPanel, BorderLayout.SOUTH);
+        controlPanel.add(buttonPanel, BorderLayout.EAST);
+
+        detectionButton.addActionListener(e -> {
+            if (detect) {
+                detectionButton.setText("Iniciar detecção");
+                detect = false;
+            } else {
+                detectionButton.setText("Parar detecção");
+                detect = true;
+            }
+        });
+        
+        add(controlPanel, BorderLayout.SOUTH);
         add(videoPanel, BorderLayout.CENTER);
     }
 }

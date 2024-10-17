@@ -1,7 +1,9 @@
+import dataBase.UserModel;
 import facialRecognition.FaceScan;
 import facialRecognition.FaceRecognition;
 import interfaces.IRegister;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
