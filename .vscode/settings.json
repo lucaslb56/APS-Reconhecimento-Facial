@@ -1,0 +1,10 @@
+{
+    "java.project.referencedLibraries": [
+        "libs/sqlite-jdbc-3.36.0.3.jar",
+        "libs/opencv/build/java/opencv-4100.jar"
+    ],
+    "java.project.sourcePaths": [
+        "libs",
+        "src"
+    ]
+}

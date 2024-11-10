@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "APS",
+            "request": "launch",
+            "mainClass": "Main",
+            "vmArgs": "-Djava.library.path=libs\\opencv\\build\\java\\x64"
+        }
+    ]
+}
